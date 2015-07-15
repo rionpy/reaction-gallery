@@ -1,0 +1,29 @@
+<div class="uploadContainer" ng-click="toggleUpload()" ng-app="upload" flow-init>
+	<div class="uploadInner" ng-click="stopProp($event)" 
+		flow-init 
+		flow-files-submitted="$flow.upload()"
+		flow-file-success="pushToFiles($message)">
+		<span class="btn close" ng-click="toggleUpload()">&times;</span>
+		<div class="drop" flow-drop ng-class="dropClass">
+			<span class="btn btn-default" flow-btn>Upload Image</span>
+			<span>or drag & drop your images here</span>
+			
+		</div>
+		
+		<div class="uploadedFileContainer">
+			<div ng-repeat="file in $flow.files" class="uploadedFile">
+				<div class="uploadThumbnail" ng-show="$flow.files.length">
+					<img flow-img="file" />
+				</div>
+				<div class="progress progress-striped" ng-class="{active: file.isUploading()}">
+					<div class="progress-bar" role="progressbar"
+						aria-valuenow="{{file.progress() * 100}}"
+						aria-valuemin="0"
+						aria-valuemax="100"
+						ng-style="{width: (file.progress() * 100) + '%'}">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

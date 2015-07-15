@@ -1,0 +1,66 @@
+<html>
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="js/vendor/angular.min.js"></script>
+	<script src="js/vendor/ng-flow-standalone.min.js"></script>
+	<script src="js/vendor/angular-animate.min.js"></script>
+	
+	<link href="css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="style.php/style.scss" rel="stylesheet"/>
+	</head>
+	<body>
+		<div ng-app="galleryApp">
+			<div ng-controller="galleryController">
+				<div ng-if="showUpload" static-include="./views/upload.html">
+				</div>
+				
+				<div class="displayImgOuter" ng-if="displayActive" ng-click="toggleActive()">
+					<div class="displayImgInner" ng-click="stopProp($event)">
+						<div class="displayImgOptions" set-width="{{imgOptionsWidth}}">
+							<span class="btn btn-default" ng-click="getUrl()">Copy image url</span>
+							<span class="btn close" ng-click="toggleActive()">&times;</span>
+						</div>
+						<img class="displayImg" get-width="imgOptionsWidth" ng-src="{{imgFolder}}{{displayedImg.id}}.{{displayedImg.extension}}"/>
+					</div>
+				</div>
+				
+				<div class="container">
+					<div class="controlBar">
+						<div>
+							<label class="searchBar">Search: <input ng-model="searchText" clear-input></label>
+							
+						</div>&nbsp;
+						<div>
+							<span class="btn btn-default" ng-click="filesReverse = !filesReverse">{{filesReverse === true ? "Oldest first" : "Newest first"}}</span>
+							<span class="btn btn-default" ng-click="noTags = !noTags">{{noTags === true ? "Show all" : "Show untagged"}}</span>
+							<span class="btn btn-default" ng-class="{'btn-danger':deleteFiles}" ng-click="!deleteFiles? toggleDelete() : confirmDelete()">{{deleteFiles === false? "Delete files" : "Confirm delete?"}}</span>
+							<span class="btn btn-default" ng-if="deleteFiles" ng-click="toggleDelete()">Cancel</span>
+							<span class="btn btn-default" ng-click="showUpload = true">Upload files</span>
+						</div>
+						<span class="stretch"></span>
+					</div>
+					
+					<div class="galleryContainer">
+						<div class="galleryItem" ng-repeat="file in files | filter:searchText | orderBy:'id':filesReverse | noTags:noTags" space-between>
+							<input type="checkbox" class="deleteChkBox" ng-hide="!deleteFiles" ng-model="selected[$index]" ng-true-value="{{file}}"/>
+							<div class="imgContainer">
+								<img ng-src="{{thumbFolder}}{{file.id}}.jpg" ng-click="displayImg(file)"/>
+							</div>
+							<span class="imgOptions glyphicon glyphicon-cog" ng-click="toggleShowKeywords(file)"></span>
+							<div class="keywordDiv" ng-form="keywordForm" ng-show="file.showKeywords">
+								<label class="keywordLabel">Tags</label>
+								<input type="text" ng-model="file.editKeywords" ng-init="file.editKeywords = file.keywords"></input>
+								<span ng-if="keywordForm.$dirty" class="btn btn-default" ng-click="saveKeywords(file, keywordForm)">Save changes</span>
+							</div>
+						</div>
+						<span class="stretch"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	<script src="js/galleryApp.js"></script>
+	<script src="js/services/galleryService.js"></script>
+	<script src="js/controllers/galleryController.js"></script>
+	</body>
+</html>
