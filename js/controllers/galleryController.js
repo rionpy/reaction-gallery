@@ -27,7 +27,10 @@ galleryApp.controller("galleryController", ["$scope", "galleryService", "$http",
 	$scope.displayImg = function(obj){
 		$scope.displayActive = true;
 		$scope.displayedImg = obj;
-		$scope.copyUrl = window.location.href.substring(0, window.location.href.lastIndexOf("/")+1)+"pics/"+$scope.displayedImg.id+"."+$scope.displayedImg.extension;
+		
+		var link = document.createElement("a");
+		link.href = $scope.imgFolder+$scope.displayedImg.id+"."+$scope.displayedImg.extension;
+		$scope.copyUrl = link.protocol+"//"+link.host+link.pathname+link.search+link.hash;
 	};
 	$scope.stopProp = function($event){
 		$event.stopPropagation();
