@@ -28,10 +28,10 @@ mod.directive('infiniteScroll', [
         }
         handler = function() {
           var elementBottom, remaining, shouldScroll, windowBottom;
-          windowBottom = $window.height() + $window.scrollTop();
-          elementBottom = elem.offset().top + elem.height();
+          windowBottom = $window[0].innerHeight + $window[0].pageYOffset;
+          elementBottom = elem[0].offsetTop + elem[0].clientHeight;
           remaining = elementBottom - windowBottom;
-          shouldScroll = remaining <= $window.height() * scrollDistance;
+          shouldScroll = remaining <= $window[0].innerHeight * scrollDistance;
           if (shouldScroll && scrollEnabled) {
             if ($rootScope.$$phase) {
               return scope.$eval(attrs.infiniteScroll);
@@ -47,13 +47,17 @@ mod.directive('infiniteScroll', [
           return $window.off('scroll', handler);
         });
         return $timeout((function() {
-          if (attrs.infiniteScrollImmediateCheck) {
-            if (scope.$eval(attrs.infiniteScrollImmediateCheck)) {
-              return handler();
-            }
-          } else {
-            return handler();
-          }
+			if(!(attrs.infiniteScrollImmediateCheck === false)){
+				var unbindWatcher = scope.$watch(function(){return elem[0].clientHeight}, function(newVal, oldVal) {
+					if(typeof newVal != undefined){
+						if((newVal != 0 && newVal == oldVal) || elem[0].clientHeight >= $window[0].innerHeight){
+							unbindWatcher();
+						}else{
+							handler();
+						}
+					}
+				});
+			}
         }), 0);
       }
     };
