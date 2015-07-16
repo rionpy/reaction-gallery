@@ -4,6 +4,7 @@
 	<script src="js/vendor/angular.min.js"></script>
 	<script src="js/vendor/ng-flow-standalone.min.js"></script>
 	<script src="js/vendor/angular-animate.min.js"></script>
+	<script src="js/vendor/ng-infinite-scroll.js"></script>
 	
 	<link href="css/bootstrap.min.css" rel="stylesheet"/>
 	<link href="style.php/style.scss" rel="stylesheet"/>
@@ -40,8 +41,8 @@
 						<span class="stretch"></span>
 					</div>
 					
-					<div class="galleryContainer">
-						<div class="galleryItem" ng-repeat="file in files | filter:searchText | orderBy:'id':filesReverse | noTags:noTags" space-between>
+					<div class="galleryContainer" infinite-scroll="paginate()" infinite-scroll-distance="2">
+						<div class="galleryItem" ng-repeat="file in files | lazySearch:searchText:3 | orderBy:'id':filesReverse | noTags:noTags" space-between ng-if="$index<fileLimit">
 							<input type="checkbox" class="deleteChkBox" ng-hide="!deleteFiles" ng-model="selected[$index]" ng-true-value="{{file}}"/>
 							<div class="imgContainer">
 								<img ng-src="{{thumbFolder}}{{file.id}}.jpg" ng-click="displayImg(file)"/>
