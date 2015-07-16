@@ -90,6 +90,7 @@ body {
 
 .galleryContainer {
 	text-align: justify;
+	overflow-x: hidden;
 	@include select-none();
 	
 	.galleryItem {
