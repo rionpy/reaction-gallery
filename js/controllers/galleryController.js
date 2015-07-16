@@ -11,9 +11,10 @@ galleryApp.controller("galleryController", ["$scope", "galleryService", "$http",
 	$scope.noTags = false;
 	$scope.imgFolder = "./pics/";
 	$scope.thumbFolder = "./thumbs/";
+	$scope.fileLimit = 0;
 	
-	$scope.test = function(){
-		$scope.files.push({extension: "jpg", id: 37, keywords: "paska"});
+	$scope.paginate = function(){
+		$scope.fileLimit += 10;
 	}
 	$scope.toggleUpload = function(){
 		$scope.showUpload = !$scope.showUpload;
