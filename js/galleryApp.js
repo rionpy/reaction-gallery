@@ -1,4 +1,4 @@
-var galleryApp = angular.module("galleryApp", ["flow", "ngAnimate"]);
+var galleryApp = angular.module("galleryApp", ["flow", "ngAnimate", "infinite-scroll"]);
 var fileExtensions = ["png", "jpg", "jpeg", "gif"];
 
 galleryApp.config(["flowFactoryProvider", function(flowFactoryProvider){
@@ -100,4 +100,16 @@ galleryApp.filter("noTags", function(){
 		});
 		return apply? filtered : items;
 	};
+});
+
+galleryApp.filter("lazySearch", function(filterFilter) {
+	return function(items, filterBy, limit){
+		if(typeof filterBy === "undefined"){
+			return items;
+		}else if(filterBy.length >= limit){
+			return filterFilter(items, filterBy);
+		}else{
+			return items;
+		}
+	}
 });
