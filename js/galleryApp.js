@@ -38,6 +38,9 @@ galleryApp.directive("getWidth", function($rootScope){
 	return{
 		restrict: "A",
 		link: function(scope, element, attrs){
+			scope.$watch(function(){return element[0].clientWidth}, function(newVal, oldVal){
+				$rootScope[attrs.getWidth] = newVal;
+			});
 			element.bind("load", function(){
 				$rootScope[attrs.getWidth] = element[0].clientWidth;
 				$rootScope.$digest();
